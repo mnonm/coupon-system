@@ -6,9 +6,11 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import com.example.api.repository.CouponRepository;
 
@@ -20,6 +22,15 @@ class ApplyServiceTest {
 
 	@Autowired
 	private CouponRepository couponRepository;
+
+	@Autowired
+	private RedisTemplate<String, String> redisTemplate;
+
+	@BeforeEach
+	void init() {
+		couponRepository.deleteAll();
+		redisTemplate.delete("coupon_count");
+	}
 
 	@Test
 	public void 한번만응모() {
